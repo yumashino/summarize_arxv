@@ -1,6 +1,10 @@
 arxiv
-dicttoxml
 openai
+dicttoxml
 Pillow
 PyMuPDF
 xmltodict
+langchain
+chromadb
+tiktoken
+tqdm
