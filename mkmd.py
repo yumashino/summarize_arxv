@@ -163,6 +163,7 @@ def get_concat_tile_resize(im_list_2d, resample=Image.BICUBIC):
     return get_concat_v_multi_resize(im_list_v, resample=resample)
 
 
+
 def get_all_page(fname, max_w=1600, max_h=900):
     pdf_file = fitz.open(fname)
     page_imgs = []
@@ -177,6 +178,11 @@ def get_all_page(fname, max_w=1600, max_h=900):
         except Exception as e:
             print(e)
             continue
+
+    if len(page_imgs) == 0:
+        return None
+    elif len(page_imgs) == 1:
+        return page_imgs[0]
 
     if pdf_file.page_count <= 8:
         n = int(pdf_file.page_count / 2)
@@ -219,11 +225,12 @@ def make_md(f, dirname, filename, keywords=[]):
 
     # Get tiled image of pdf
     tiled_pages = get_all_page(pdf_name)
-    tiled_pages.save(f'{dirname}/tiled_pages.jpg', 'JPEG')
+    if tiled_pages is not None:
+        tiled_pages.save(f'{dirname}/tiled_pages.jpg', 'JPEG')
 
-    f.write('\n---\n')
-    f.write('<!-- _class: info -->\n')
-    f.write(f'![height:650]({dirname}/tiled_pages.jpg)\n')
+        f.write('\n---\n')
+        f.write('<!-- _class: info -->\n')
+        f.write(f'![height:650]({dirname}/tiled_pages.jpg)\n')
 
     # Get all images from the pdf
     _, _, image_list = extract_images_from_pdf(pdf_name, imgdir=dirname)
